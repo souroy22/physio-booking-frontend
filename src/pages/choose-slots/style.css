@@ -1,0 +1,29 @@
+.booking-container {
+  padding: 30px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.booking-title {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.booking-description {
+  font-size: 16px;
+  color: gray;
+  width: 40%;
+}
+
+.booking-table {
+  width: 60%;
+  margin-top: 30px;
+}
+
+.bottom-section {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+}

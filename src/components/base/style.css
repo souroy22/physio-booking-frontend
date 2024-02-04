@@ -1,0 +1,16 @@
+.base-section {
+  height: calc(100vh - 65px);
+  width: 100vw;
+}
+
+.content-section {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-top: 65px;
+}
+
+.content-section::-webkit-scrollbar {
+  display: none;
+}

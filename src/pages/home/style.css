@@ -1,0 +1,39 @@
+.services-container {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.services-title {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.services-title::after {
+  content: "";
+  height: 4px;
+  width: 15%;
+  background-color: navy;
+  position: absolute;
+  bottom: -6px;
+  left: 40%;
+  border-radius: 10px;
+}
+
+.services-section {
+  text-align: center;
+  color: gray;
+  font-size: 15px;
+  width: 38%;
+  margin: 0 auto !important;
+}
+
+.services {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}

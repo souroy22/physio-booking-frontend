@@ -1,0 +1,31 @@
+.booking-form-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.booking-form {
+  width: 300px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px gray;
+  gap: 20px;
+}
+
+.form-title {
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  color: brown;
+}
+
+.form-verify-user {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}

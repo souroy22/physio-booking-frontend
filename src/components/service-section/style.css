@@ -1,0 +1,27 @@
+.service-image {
+  object-fit: contain;
+  height: 100px;
+  width: 100px;
+  mix-blend-mode: color-burn;
+  aspect-ratio: 3/2;
+}
+
+.service-card {
+  width: 300px;
+  height: 300px;
+  margin-top: 30px;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.service-card-title {
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.service-card-description {
+  color: gray;
+  font-size: 15px;
+}

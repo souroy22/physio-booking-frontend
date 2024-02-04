@@ -1,0 +1,30 @@
+.auth-wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.auth-wrapper-left {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+.auth-wrapper-left-image {
+  mix-blend-mode: color-burn;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.auth-wrapper-right {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
