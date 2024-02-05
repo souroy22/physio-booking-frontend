@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Navbar from "../navbar/Navbar";
+import Navbar from "../navbar";
 import "./style.css";
 import { ReactNode } from "react";
 

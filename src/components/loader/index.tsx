@@ -1,5 +1,5 @@
 import Backdrop from "@mui/material/Backdrop";
-import PropTypes from "prop-types";
+import LOADING_IMAGE from "../../assets/images/pngtree-cartoon-snail-loading-gif-dynamic-diagram-png-image_6992584.png";
 import "./styles.css";
 
 type PropTypes = {
@@ -12,11 +12,7 @@ const Loader = ({ loader }: PropTypes) => {
       sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
       open={loader}
     >
-      <img
-        alt="loading..."
-        className="loader-image"
-        src="https://img.pikbest.com/png-images/20190918/cartoon-snail-loading-loading-gif-animation_2734139.png!bw700"
-      />
+      <img alt="loading..." className="loader-image" src={LOADING_IMAGE} />
     </Backdrop>
   );
 };

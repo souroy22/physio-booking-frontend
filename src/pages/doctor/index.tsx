@@ -1,12 +1,12 @@
 import { Avatar, Box, Button } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./style.css";
 import { getAllDoctors } from "../../store/doctor/doctorReducer";
 import { getDoctors } from "../../apis/doctorApis";
 import { setLoader } from "../../store/global/globalReducer";
 import { RootState } from "../../store/store";
 import { createSearchParams, useNavigate } from "react-router-dom";
+import "./style.css";
 
 const DoctorPage = () => {
   const dispatch = useDispatch();
@@ -20,8 +20,6 @@ const DoctorPage = () => {
     dispatch(setLoader(true));
     try {
       const result = await getDoctors();
-      console.log("result", result);
-
       dispatch(getAllDoctors(result));
     } catch (error) {
       console.log("Error");
@@ -32,6 +30,14 @@ const DoctorPage = () => {
   useEffect(() => {
     onLoad();
   }, []);
+
+  if (!doctors || !doctors.length) {
+    return (
+      <Box className="doctor-section" sx={{ alignItems: "center" }}>
+        <h2 style={{ color: "gray" }}>No doctors found!</h2>
+      </Box>
+    );
+  }
 
   return (
     <Box className="doctor-section">

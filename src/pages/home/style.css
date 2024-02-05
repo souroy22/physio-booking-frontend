@@ -27,8 +27,15 @@
   text-align: center;
   color: gray;
   font-size: 15px;
-  width: 38%;
+  width: 550px;
   margin: 0 auto !important;
+}
+
+@media screen and (max-width: 500px) {
+  .services-section {
+    max-width: 100%;
+    padding: 0 10px;
+  }
 }
 
 .services {

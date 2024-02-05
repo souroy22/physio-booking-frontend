@@ -49,37 +49,22 @@ const Testimonials = () => {
     ],
   };
 
-  // const gotoNext = () => {
-  //   sliderRef?.current?.slickNext && sliderRef?.current?.slickNext();
-  // };
-
-  // const gotoPrev = () => {
-  //   sliderRef?.current?.slickPrev && sliderRef?.current?.slickPrev();
-  // };
-
   return (
-    <Box
-      id="reviews"
-      sx={
-        {
-          // width: "90%",
-          // margin: "0 auto",
-          // padding: "20px 0",
-          // marginBottom: "20px",
-          // position: "relative",
-        }
-      }
-    >
+    <Box id="reviews">
       <Box className="testimonials-heading">
-        <Box className="testimonials-heading">
-          <h1 className="gradient-text">Testimonials</h1>
-          <p className="testimonials-description">
-            Dono't just take our word for it - see what actual users of our
-            service <br /> have to say about their experience
-          </p>
+        <Box className="gradient-text">Testimonials</Box>
+        <Box className="testimonials-description">
+          Dono't just take our word for it - see what actual users of our
+          service <br /> have to say about their experience
         </Box>
       </Box>
-      <Box>
+      <Box
+        sx={{
+          "& .slick-list": {
+            marginRight: "20px !important",
+          },
+        }}
+      >
         <Slider {...settings} ref={sliderRef}>
           {testimonials.map((data) => (
             <Box className="review-card" key={data.id}>

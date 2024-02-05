@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate } from "react-router-dom";
 import "./App.css";
 import RouterComponent from "./RouterComponent";
@@ -14,13 +14,16 @@ import { customLocalStorage } from "./utils/localStorage";
 import { setUserData } from "./store/auth/authReducer";
 
 const App = () => {
+  const [startLoadingComponent, setStartLoadingComponent] =
+    useState<boolean>(true);
   const { loading } = useSelector((state: RootState) => state.globalReducer);
 
   const dispatch = useDispatch();
 
   const onLoad = async () => {
+    setStartLoadingComponent(true);
     dispatch(setLoader(true));
-    const token = customLocalStorage.getData("token");
+    const token = await customLocalStorage.getData("token");
     if (!token || token === null) {
       dispatch(setLoader(false));
       return <Navigate to="/signin" />;
@@ -30,10 +33,12 @@ const App = () => {
         user: { name, email, role, avatar, id },
       } = await getUser();
       dispatch(setUserData({ token, name, email, isAdmin: role, avatar, id }));
+      dispatch(setLoader(false));
     } catch (error) {
       console.log("Error");
+      dispatch(setLoader(false));
     }
-    dispatch(setLoader(false));
+    setStartLoadingComponent(false);
   };
 
   useEffect(() => {
@@ -42,13 +47,15 @@ const App = () => {
 
   return (
     <>
-      <BrowserRouter>
-        <Base>
-          <RouterComponent />
-        </Base>
-      </BrowserRouter>
-      <ToastContainer position="top-right" autoClose={2000} />
       {loading && <Loader loader={loading} />}
+      {!startLoadingComponent && (
+        <BrowserRouter>
+          <Base>
+            <RouterComponent />
+          </Base>
+        </BrowserRouter>
+      )}
+      <ToastContainer position="top-right" autoClose={2000} />
     </>
   );
 };

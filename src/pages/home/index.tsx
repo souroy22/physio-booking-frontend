@@ -18,8 +18,9 @@ const HomePage = () => {
           utilizing evidence-based techniques for effective results.
         </Typography>
         <Box className="services">
-          {services.map((service) => (
+          {services.map((service, index) => (
             <ServiceSection
+              key={index}
               imagePath={service.icon}
               title={service.title}
               description={service.description}

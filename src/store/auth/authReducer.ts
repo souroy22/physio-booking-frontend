@@ -19,7 +19,7 @@ export type AuthInitialState = {
 };
 const initialState: AuthInitialState = {
   isLoggedIn: false,
-  user: { name: "", email: "", isAdmin: "User", avatar: null, id: "" },
+  user: { name: "", email: "", isAdmin: "", avatar: null, id: "" },
 };
 
 export const authSlice = createSlice({

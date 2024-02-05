@@ -9,6 +9,8 @@ import { Route, Routes } from "react-router-dom";
 import BookingPage from "./pages/booking";
 import ChooseSlots from "./pages/choose-slots";
 import Appointments from "./pages/appointments";
+import NoPageFound from "./pages/NoPageFound";
+import Profile from "./pages/profile";
 
 const RouterComponent = () => {
   return (
@@ -27,7 +29,9 @@ const RouterComponent = () => {
         </Route>
         <Route path="/choose-slots" element={<ChooseSlots />} />
       </Route>
+      <Route path="/profile" element={<Profile />} />
       <Route path="/appointments" element={<Appointments />} />
+      <Route path="*" element={<NoPageFound />} />
     </Routes>
   );
 };

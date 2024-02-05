@@ -67,7 +67,6 @@ export const bookSlot = async (
 };
 
 export const getAppointments = async (id: string) => {
-  console.log("Id", id);
   try {
     const res: any = await AXIOS.get(`slot/appointments/${id}`);
     return res.data;

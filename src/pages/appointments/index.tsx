@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -8,12 +9,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import "./style.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAppointments } from "../../apis/slotApis";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { getAllAppointments } from "../../store/appointment/appointmentReducer";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import "./style.css";
 
 const columns = [
   { label: "Start Time", value: "startTime" },
@@ -24,6 +26,7 @@ const columns = [
 ];
 
 const Appointments = () => {
+  const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.authReducer.user);
   const appointments = useSelector(
     (state: RootState) => state.appointmentReducer.appointments
@@ -42,13 +45,18 @@ const Appointments = () => {
   };
 
   const onLoad = async () => {
-    const data = await getAppointments(user.id);
-    const restructureData: any = [];
-    for (const d of data) {
-      restructureData.push(restructure(d));
+    setLoading(true);
+    try {
+      const data = await getAppointments(user.id);
+      const restructureData: any = [];
+      for (const d of data) {
+        restructureData.push(restructure(d));
+      }
+      dispatch(getAllAppointments(restructureData));
+    } catch (error) {
+      console.log("ERROR");
     }
-    console.log("restructureData", restructureData);
-    dispatch(getAllAppointments(restructureData));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -56,7 +64,10 @@ const Appointments = () => {
   }, []);
   return (
     <Box className="appointment-list-section">
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        sx={screen.availWidth > 750 ? { width: "60%", margin: "0 auto" } : {}}
+      >
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -66,19 +77,54 @@ const Appointments = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {appointments.map((appointment: any) => (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            {loading ? (
+              <TableCell colSpan={6} align="center" sx={{ height: "100px" }}>
+                <CircularProgress
+                  sx={{
+                    height: "30px !important",
+                    width: "30px !important",
+                    color: "navy",
+                  }}
+                />
+              </TableCell>
+            ) : appointments.length ? (
+              <TableCell
+                colSpan={6}
+                align="center"
+                sx={{
+                  height: "100px",
+                  fontSize: "25px",
+                  fontWeight: 600,
+                  color: "gray",
+                }}
               >
-                <>
-                  {columns.map((col: any) => (
-                    <TableCell key={col.label}>
-                      {appointment[col.value]}
-                    </TableCell>
-                  ))}
-                </>
-              </TableRow>
-            ))}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  No Previous Appointment <SentimentDissatisfiedIcon />
+                </Box>
+              </TableCell>
+            ) : (
+              appointments.map((appointment: any, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <>
+                    {columns.map((col: any) => (
+                      <TableCell key={col.label}>
+                        {appointment[col.value]}
+                      </TableCell>
+                    ))}
+                  </>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

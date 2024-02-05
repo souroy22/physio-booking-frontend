@@ -1,16 +1,11 @@
-.gradient-text {
+/* .gradient-text {
   text-transform: uppercase;
   font-size: 40px;
   text-align: center;
   position: relative;
   display: inline-block;
   letter-spacing: 0.6px;
-}
-
-.testimonials-heading {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+  width: 100%;
 }
 
 .gradient-text::after {
@@ -22,15 +17,59 @@
   bottom: -6px;
   left: 40%;
   border-radius: 10px;
+} */
+
+.testimonials-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.gradient-text {
+  font-size: 30px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  position: relative;
+  /* width: 100%; */
+  display: inline-block;
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto; */
+  /* border: 1px solid red; */
+  /* margin-bottom: 20px; */
+}
+
+.gradient-text::after {
+  content: "";
+  height: 4px;
+  width: 20%;
+  background-color: navy;
+  position: absolute;
+  bottom: -5px;
+  left: 40%;
+  border-radius: 10px;
 }
 
 .testimonials-description {
   color: gray;
+  width: 550px;
+  margin: 0 auto !important;
+}
+
+@media screen and (max-width: 500px) {
+  .services-section {
+    max-width: 100%;
+    padding: 0 10px;
+  }
 }
 
 .review-card {
   text-align: center;
   width: 300px !important;
+  min-height: 300px;
   padding: 15px;
   display: flex !important;
   justify-content: center;
@@ -75,13 +114,16 @@
 }
 
 .testimonials-heading {
+  width: 100%;
+  margin: 0 auto;
   margin-bottom: 50px;
-  padding: 0 80px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
   align-items: center;
-  gap: 20px;
+  /* gap: 20px; */
+  text-align: center;
 }
 
 .review-action-btn {

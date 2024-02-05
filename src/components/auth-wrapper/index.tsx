@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import AUTH_PAGE_IMAGE from "../../assets/images/4h4t9GYFHZ.gif";
 import "./style.css";
 
 const AuthWrapper = () => {
@@ -19,10 +20,7 @@ const AuthWrapper = () => {
         className="auth-wrapper-left"
         sx={{ width: screen.availWidth < 500 ? "100%" : "50%" }}
       >
-        <img
-          className="auth-wrapper-left-image"
-          src="https://assets-v2.lottiefiles.com/a/d491c948-1168-11ee-a395-fbe9133ed3d7/4h4t9GYFHZ.gif"
-        />
+        <img className="auth-wrapper-left-image" src={AUTH_PAGE_IMAGE} />
       </Box>
       <Box
         className="auth-wrapper-right"

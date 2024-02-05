@@ -1,4 +1,11 @@
-import { Box, Button, TextField, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import "./style.css";
 import {
   createSearchParams,
@@ -11,9 +18,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSlots } from "../../store/slot/slotReducer";
 import { RootState } from "../../store/store";
 import Dropdown from "../../components/dropdown";
-import CheckIcon from "@mui/icons-material/Check";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { getUserByEmailId } from "../../apis/userApis";
+import SkeletonComp from "../../components/skeleton";
+import notification from "../../config/notification";
+import { verifyEmailID } from "../../utils/verifyEmail";
 
 const BookingPage = () => {
   const [selectedSlot, setSelectedSlot] = useState<string>("");
@@ -21,6 +30,8 @@ const BookingPage = () => {
   const [remarks, setRemarks] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [verifyEmail, setVerifyEmail] = useState<boolean | string>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [submitForm, setSubmitForm] = useState<boolean>(false);
 
   const [searchParams] = useSearchParams();
 
@@ -33,9 +44,15 @@ const BookingPage = () => {
   const id = searchParams.get("id") || "";
   const timing = searchParams.get("timing") || "";
 
-  const onLoad = async () => {
+  const getSlotData = async () => {
     const result = await getAvailableSlots(id, timing);
     dispatch(setSlots(result.slots));
+  };
+
+  const onLoad = async () => {
+    setLoading(true);
+    await getSlotData();
+    setLoading(false);
   };
 
   const selectSlot = (name: string, value: string) => {
@@ -47,22 +64,30 @@ const BookingPage = () => {
   };
 
   const handleClick = async () => {
-    // const slotDayId = selectedSlot.split("/")[1];
+    if (!selectedSlot.trim()) {
+      notification.error("Please select day");
+      return;
+    }
+    if (!selectedTime.trim()) {
+      notification.error("Please select time");
+      return;
+    }
+    if (!remarks.trim()) {
+      notification.error("Please type some remarks");
+      return;
+    }
+    setSubmitForm(true);
     const slotTimeId = selectedTime.split("/")[1];
     let userId = "";
     if (user.isAdmin === "Saler" && typeof verifyEmail === "string") {
       userId = verifyEmail;
-      // console.log(`Slot day id - ${slotDayId}, Slot Time id - ${slotTimeId}`);
     } else {
       userId = user.id;
     }
     await bookSlot(slotTimeId, userId, remarks);
+    setSubmitForm(false);
     navigate("/");
   };
-
-  useEffect(() => {
-    onLoad();
-  }, [timing]);
 
   const formattedSlots: { name: string }[] = Object.keys(slots).map(
     (slot: any) => {
@@ -71,11 +96,45 @@ const BookingPage = () => {
   );
 
   const checkUser = async () => {
-    const user = await getUserByEmailId(email);
-    if (user) {
-      setVerifyEmail(user._id);
+    if (!verifyEmailID(email)) {
+      notification.error("Please type a valid email id");
+      return;
     }
+    setVerifyEmail("loading");
+    const user = await getUserByEmailId(email);
+    if (!user) {
+      setVerifyEmail(false);
+      return;
+    }
+    setVerifyEmail(user._id);
   };
+
+  const handleFilter = async (_: string, value: string) => {
+    const params: any = {};
+    if (id) {
+      params["id"] = searchParams.get("id");
+    }
+    params["timing"] = value;
+    navigate({
+      pathname: location.pathname,
+      search: `?${createSearchParams(params)}`,
+    });
+    await getSlotData();
+  };
+
+  console.log("kjsdjkjk");
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box className="skeleton-wraapper">
+        <SkeletonComp width="300px" height="500px" count={1} />
+      </Box>
+    );
+  }
 
   const formattedTime: { name: string }[] = slots[selectedSlot.split("/")[0]]
     ? slots[selectedSlot.split("/")[0]].slots.map((slot: any) => {
@@ -91,13 +150,6 @@ const BookingPage = () => {
         <Box className="booking-form">
           <Typography className="form-title">Book Appointment</Typography>
           <Dropdown
-            name="slot-day"
-            placeholder="Select days"
-            options={formattedSlots}
-            handleChange={selectSlot}
-            selectedValue={selectedSlot}
-          />
-          <Dropdown
             name="slot-filter"
             placeholder="Select Filter"
             options={[
@@ -105,18 +157,15 @@ const BookingPage = () => {
               { name: "After_Noon" },
               { name: "Evening" },
             ]}
-            handleChange={(_, value: string) => {
-              const params: any = {};
-              if (id) {
-                params["id"] = searchParams.get("id");
-              }
-              params["timing"] = value;
-              navigate({
-                pathname: location.pathname,
-                search: `?${createSearchParams(params)}`,
-              });
-            }}
+            handleChange={handleFilter}
             selectedValue={searchParams.get("timing") || ""}
+          />
+          <Dropdown
+            name="slot-day"
+            placeholder="Select days"
+            options={formattedSlots}
+            handleChange={selectSlot}
+            selectedValue={selectedSlot}
           />
           <Dropdown
             name="slot-time"
@@ -129,43 +178,75 @@ const BookingPage = () => {
           {user.isAdmin === "Saler" && (
             <Box className="form-verify-user">
               <TextField
+                required
+                autoComplete="off"
                 value={email}
+                placeholder="Type User Emailid"
                 onChange={(event) => {
                   setVerifyEmail(false);
                   setEmail(event.target.value);
                 }}
               />
 
-              <Box>
-                {!verifyEmail ? (
+              <Box sx={{ display: "flex" }}>
+                {!verifyEmail || verifyEmail === "loading" ? (
                   <Tooltip title="Click to verify">
-                    <CheckIcon
+                    <Button
                       onClick={checkUser}
                       sx={{
                         cursor: "pointer",
-                        "&:hover": { transform: "scale(1.1)" },
+                        backgroundColor: "green",
+                        color: "#FFF",
+                        transition: "all 0.4s ease-in-out",
+                        "&:hover": {
+                          backgroundColor: "green",
+                          transform: "scale(1.05)",
+                        },
                       }}
-                    />
+                    >
+                      {verifyEmail === "loading" ? (
+                        <CircularProgress
+                          sx={{
+                            color: "#FFF",
+                            height: "24px !important",
+                            width: "24px !important",
+                          }}
+                        />
+                      ) : (
+                        "Verify"
+                      )}
+                    </Button>
                   </Tooltip>
                 ) : (
-                  <Tooltip title="Verified mail">
-                    <VerifiedIcon />
+                  <Tooltip title="Email Verified">
+                    <VerifiedIcon sx={{ color: "navy" }} />
                   </Tooltip>
                 )}
               </Box>
             </Box>
           )}
           <TextField
+            placeholder="Add remarks"
             value={remarks}
             onChange={(event) => setRemarks(event.target.value)}
           />
 
           <Button
-            disabled={user.isAdmin === "Saler" && !verifyEmail}
+            disabled={!(verifyEmail && verifyEmail !== "loading")}
             variant="contained"
             onClick={handleClick}
           >
-            Book
+            {submitForm ? (
+              <CircularProgress
+                sx={{
+                  color: "#FFF",
+                  height: "20px !important",
+                  width: "20px !important",
+                }}
+              />
+            ) : (
+              "Book"
+            )}
           </Button>
         </Box>
       )}

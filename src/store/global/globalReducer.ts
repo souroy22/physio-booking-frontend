@@ -5,7 +5,7 @@ type GlobalStateType = {
 };
 
 const initialState: GlobalStateType = {
-  loading: false,
+  loading: true,
 };
 
 export const authSlice = createSlice({
