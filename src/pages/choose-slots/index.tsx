@@ -93,7 +93,11 @@ const ChooseSlots = () => {
         </TableContainer>
       </Box>
       <Box className="bottom-section">
-        <Button variant="contained" onClick={onClick}>
+        <Button
+          sx={{ minWidth: "150px" }}
+          variant="contained"
+          onClick={onClick}
+        >
           {loading ? (
             <CircularProgress
               sx={{ width: "20px !important", height: "20px !important" }}
