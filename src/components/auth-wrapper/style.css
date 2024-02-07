@@ -11,6 +11,7 @@
   align-items: center;
   flex-wrap: wrap;
   height: 100%;
+  margin: 0 auto;
 }
 
 .auth-wrapper-left-image {
@@ -27,4 +28,10 @@
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
+}
+
+@media screen and (max-width: 700px) {
+  .auth-wrapper-right {
+    align-items: flex-start;
+  }
 }

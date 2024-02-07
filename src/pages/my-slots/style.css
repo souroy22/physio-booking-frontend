@@ -1,0 +1,81 @@
+.my-slots-container {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.table {
+  margin: 0 auto;
+  box-shadow: 0 0 10px gray;
+  border-radius: 10px;
+  /* overflow-x: auto; */
+}
+
+.days-heading {
+  display: flex;
+  height: 60px;
+  /* width: max-content; */
+  border-bottom: 3px solid red;
+  gap: 5px;
+}
+
+.day-heading-box {
+  height: 100%;
+  width: 150px;
+  padding: 0 30px;
+  border-left: none;
+  font-weight: 700;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+
+.center-align-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.days-body {
+  display: flex;
+}
+
+.days-data-section {
+  display: flex;
+  border-top: none;
+  height: 50px;
+  border-bottom: 1px solid;
+}
+
+.days-data-section:last-child {
+  border-bottom: none;
+}
+
+.days-data-section-leftbar {
+  width: 200px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 3px;
+  border-right: 3px solid red;
+}
+
+.scheduled-status-section {
+  display: flex;
+  gap: 5px;
+}
+
+.scheduled-status-data {
+  width: 150px;
+  margin: 3px;
+}
+
+.isScheduled {
+  border-radius: 5px;
+  background-color: green;
+  color: white;
+  font-weight: 600;
+}

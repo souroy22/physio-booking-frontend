@@ -1,0 +1,26 @@
+.unauthorised-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.unauthorised-image {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  width: 50%;
+  height: 50%;
+}
+
+@media screen and (max-width: 800px) {
+  .unauthorised-section {
+    justify-content: flex-start;
+  }
+  .unauthorised-image {
+    width: 90%;
+    height: 60%;
+  }
+}

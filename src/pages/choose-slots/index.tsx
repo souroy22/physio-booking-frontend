@@ -41,16 +41,9 @@ const ChooseSlots = () => {
 
   const onClick = async () => {
     setLoading(true);
-    const timing: any = {};
+    const timing: string[] = [];
     for (const time of selectedTiming) {
-      if (!timing.hasOwnProperty(time.split("/")[0])) {
-        timing[time.split("/")[0]] = [time.split("/")[2]];
-      } else {
-        timing[time.split("/")[0]] = [
-          ...timing[time.split("/")[0]],
-          time.split("/")[2],
-        ];
-      }
+      timing.push(time.split("/")[2]);
     }
     await scheduledSlots(user.id, timing);
     setLoading(false);

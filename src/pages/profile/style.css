@@ -8,9 +8,18 @@
   padding: 30px;
 }
 
+.edit-icon {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: navy;
+  cursor: pointer;
+}
+
 .profile-card {
   height: 400px;
   width: 30%;
+  max-width: 500px;
   box-shadow: 0 0 10px gray;
   position: relative;
   padding: 20px;
@@ -23,7 +32,13 @@
   top: -37px;
   font-size: 50px;
   font-weight: 900;
-  text-shadow: #fc0 1px 0 10px;
+  background: #121fcf;
+  background: -webkit-linear-gradient(to right, #121fcf 0%, #cf1512 100%);
+  background: -moz-linear-gradient(to right, #121fcf 0%, #cf1512 100%);
+  background: linear-gradient(to right, #121fcf 0%, #cf1512 100%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: gray 1px 0 25px;
 }
 
 .profile-card-content {
@@ -31,13 +46,14 @@
   justify-content: space-between;
   padding: 30px;
   height: 100%;
+  width: 100%;
 }
 
 .data-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 50%;
+  width: 70%;
 }
 
 .data-heading {
@@ -84,25 +100,42 @@
 }
 
 .gradient-button:hover {
-  background-position: right center; /* change the direction of the change here */
+  background-position: right center;
   color: #fff;
   text-decoration: none;
 }
 
 .right-content {
   position: relative;
+  cursor: pointer;
 }
 
 .edit-profile-pic {
   position: absolute;
   z-index: 1000;
   right: 10px;
-  top: 0;
+  bottom: 0;
   cursor: pointer;
+  color: #5e5e5e;
 }
 
 .profile-pic {
   height: 100px !important;
   width: 100px !important;
   font-size: 30px !important;
+}
+
+@media screen and (max-width: 1400px) {
+  .profile-card {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .data-heading {
+    font-size: 17px;
+  }
+  .profile-card {
+    width: 100%;
+  }
 }

@@ -4,3 +4,16 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.rediret-text {
+  color: gray;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.highlight-link {
+  color: blue;
+  font-weight: 700;
+  text-decoration: underline;
+}

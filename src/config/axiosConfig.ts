@@ -1,28 +1,14 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from "axios";
 import { customLocalStorage } from "../utils/localStorage";
 
-// interface CommonHeaderProperties extends HeadersDefaults {
-//   "Content-Type"?: string;
-//   Authorization?: string;
-// }
-
-// const token = customLocalStorage.getData("token");
-
-// const headers: CommonHeaderProperties = {
-//   ...axios.defaults.headers,
-//   "Content-Type": "application/json",
-// };
-
-// headers["Authorization"] = `Bearer ${token}`;
-
-// console.log("Token", token);
-
-// const AXIOS = axios.create({
-//   baseURL: import.meta.env.VITE_BASE_URL,
-//   headers: headers,
-// });
-
-// export default AXIOS;
+interface ErrorResponseData {
+  error: string; // Define the structure based on your API error response
+  // Add other properties if needed
+}
 
 const getToken = () => customLocalStorage.getData("token");
 
@@ -45,6 +31,35 @@ const createAxiosInstance = (): AxiosInstance => {
       return config;
     },
     (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  instance.interceptors.response.use(
+    (response) => {
+      // If request is successful, return response
+      return response;
+    },
+    (error: AxiosError<ErrorResponseData>) => {
+      // If there's an error, handle it
+      console.log("Error", error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("Response error:", error.response.data);
+        console.error("Status code:", error.response.status);
+        if (error.response?.data && error.response?.data.error) {
+          error.message = error.response?.data?.error;
+        }
+        // Handle error response as needed, e.g., show error message to the user
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("Request error:", error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error("Error:", error.message);
+      }
+      // Return a rejected promise so the error can be caught further
       return Promise.reject(error);
     }
   );

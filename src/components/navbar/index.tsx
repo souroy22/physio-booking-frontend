@@ -33,17 +33,17 @@ const pages = [
     private: false,
     accessRoles: [""],
   },
-  {
-    name: "Doctor",
-    url: "/doctor",
-    private: true,
-    accessRoles: ["Saler"],
-  },
+  // {
+  //   name: "Doctor",
+  //   url: "/doctor",
+  //   private: true,
+  //   accessRoles: ["Saler"],
+  // },
   {
     name: "Book Appointment",
     url: "/book-appointment",
     private: true,
-    accessRoles: ["Saler", "User", "Admin", "Doctor"],
+    accessRoles: ["Saler"],
   },
   {
     name: "Choose Slots",
@@ -52,10 +52,16 @@ const pages = [
     accessRoles: ["Doctor"],
   },
   {
+    name: "My Slots",
+    url: "/my-slots",
+    private: true,
+    accessRoles: ["Doctor"],
+  },
+  {
     name: "Appointments",
     url: "/appointments",
     private: true,
-    accessRoles: ["Doctor", "Saler", "Admin", "User"],
+    accessRoles: ["User"],
   },
 ];
 
@@ -186,7 +192,6 @@ const Navbar = () => {
             variant="h5"
             noWrap
             component="a"
-            // href="/"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -223,7 +228,9 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Click">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={user.name} src={user.avatar || ""} />
+                  <Avatar alt={user.name} src={user.avatar || ""}>
+                    {user.name.split("")[0]}
+                  </Avatar>
                 </IconButton>
               </Tooltip>
               <Menu

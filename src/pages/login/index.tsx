@@ -1,8 +1,8 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import "./style.css";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../store/auth/authReducer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TextInput from "../../components/input";
 import { useState } from "react";
 import { MdAlternateEmail } from "react-icons/md";
@@ -15,12 +15,28 @@ type DataType = {
 };
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<DataType>({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (name: string, value: string) => {
     setData({ ...data, [name]: value });
+  };
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const {
+        token,
+        user: { name, email, role, avatar, id },
+      } = await handleSignin(data.email, data.password);
+      dispatch(setUserData({ token, name, email, isAdmin: role, avatar, id }));
+      navigate("/");
+    } catch (error) {
+      //
+    }
+    setLoading(false);
   };
 
   return (
@@ -44,23 +60,25 @@ const LoginPage = () => {
         type="password"
         IconComponent={TbPasswordUser}
       />
-      <Button
-        variant="contained"
-        onClick={async () => {
-          const {
-            token,
-            user: { name, email, role, avatar, id },
-          } = await handleSignin(data.email, data.password);
-          console.log("Role", role);
-          console.log("Name", name);
-          dispatch(
-            setUserData({ token, name, email, isAdmin: role, avatar, id })
-          );
-          navigate("/");
-        }}
-      >
-        Login
+      <Button variant="contained" onClick={handleClick}>
+        {loading ? (
+          <CircularProgress
+            sx={{
+              height: "22px !important",
+              width: "22px !important",
+              color: "#FFF",
+            }}
+          />
+        ) : (
+          "Login"
+        )}
       </Button>
+      <Box className="rediret-text">
+        Not Signed up yet?{" "}
+        <span className="highlight-link">
+          <Link to="/signup">SIGN UP NOW</Link>
+        </span>
+      </Box>
     </Box>
   );
 };

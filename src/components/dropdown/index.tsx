@@ -1,24 +1,25 @@
 import {
   Box,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
 } from "@mui/material";
 import "./style.css";
 
-type OptionType = {
+export type OptionType = {
   name: string;
-  value?: string;
+  value: string;
 };
 
 type PropType = {
-  selectedValue: string;
+  selectedValue: OptionType | null;
   placeholder: string;
-  handleChange: (name: string, value: string) => void;
+  handleChange: (name: string, value: OptionType) => void;
   options: OptionType[];
   name: string;
+  loading?: boolean;
 };
 
 const Dropdown = ({
@@ -27,6 +28,7 @@ const Dropdown = ({
   handleChange,
   options,
   name,
+  loading = false,
 }: PropType) => {
   return (
     <Box sx={{ marginBottom: "20px" }}>
@@ -37,21 +39,37 @@ const Dropdown = ({
           name={name}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={selectedValue}
+          value={selectedValue?.value || null}
           label={placeholder}
-          onChange={(event: SelectChangeEvent) =>
-            handleChange(event.target.name, event.target.value)
-          }
         >
-          {options.map((option) => (
+          {!loading ? (
+            options.length ? (
+              options.map((option) => (
+                <MenuItem
+                  onClick={(event: any) =>
+                    handleChange(event.target.name, option)
+                  }
+                  value={option.value}
+                >
+                  {option.name}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem disabled>No Data Available</MenuItem>
+            )
+          ) : (
             <MenuItem
-              value={
-                option.value ? `${option.name}/${option.value}` : option.name
-              }
+              disabled
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
             >
-              {option.name}
+              <CircularProgress sx={{ color: "navy", opacity: 1 }} />
             </MenuItem>
-          ))}
+          )}
         </Select>
       </FormControl>
     </Box>

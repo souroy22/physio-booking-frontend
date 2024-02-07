@@ -12,6 +12,8 @@ import Base from "./components/base";
 import { getUser } from "./apis/authApis";
 import { customLocalStorage } from "./utils/localStorage";
 import { setUserData } from "./store/auth/authReducer";
+import ErrorBoundary from "./components/errorBoundary";
+import ErrorComponent from "./pages/error-component";
 
 const App = () => {
   const [startLoadingComponent, setStartLoadingComponent] =
@@ -23,8 +25,9 @@ const App = () => {
   const onLoad = async () => {
     setStartLoadingComponent(true);
     dispatch(setLoader(true));
-    const token = await customLocalStorage.getData("token");
+    const token = customLocalStorage.getData("token");
     if (!token || token === null) {
+      setStartLoadingComponent(false);
       dispatch(setLoader(false));
       return <Navigate to="/signin" />;
     }
@@ -35,6 +38,7 @@ const App = () => {
       dispatch(setUserData({ token, name, email, isAdmin: role, avatar, id }));
       dispatch(setLoader(false));
     } catch (error) {
+      setStartLoadingComponent(false);
       console.log("Error");
       dispatch(setLoader(false));
     }
@@ -51,7 +55,9 @@ const App = () => {
       {!startLoadingComponent && (
         <BrowserRouter>
           <Base>
-            <RouterComponent />
+            <ErrorBoundary fallback={<ErrorComponent />}>
+              <RouterComponent />
+            </ErrorBoundary>
           </Base>
         </BrowserRouter>
       )}

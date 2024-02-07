@@ -5,7 +5,7 @@ export const handleSignup = async (
   name: string,
   email: string,
   password: string,
-  role: "User" | "Doctor" | "Saler"
+  role: string
 ) => {
   try {
     const res: any = await AXIOS.post("/auth/signup", {

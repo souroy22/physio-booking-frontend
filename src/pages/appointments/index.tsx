@@ -35,11 +35,12 @@ const Appointments = () => {
   const dispatch = useDispatch();
 
   const restructure = (data: any) => {
+    console.log("data", data);
     return {
-      startTime: data.startTime,
-      endTime: data.endTime,
-      day: data.day.day,
-      appointmentDoctor: data.availableDoctor?.name || "",
+      startTime: data.slot.startTime,
+      endTime: data.slot.endTime,
+      day: data.slot.day.day,
+      appointmentDoctor: data.doctor?.name || "",
       remarks: data.remarks,
     };
   };
@@ -52,6 +53,7 @@ const Appointments = () => {
       for (const d of data) {
         restructureData.push(restructure(d));
       }
+
       dispatch(getAllAppointments(restructureData));
     } catch (error) {
       console.log("ERROR");
@@ -87,7 +89,7 @@ const Appointments = () => {
                   }}
                 />
               </TableCell>
-            ) : appointments.length ? (
+            ) : !appointments.length ? (
               <TableCell
                 colSpan={6}
                 align="center"
