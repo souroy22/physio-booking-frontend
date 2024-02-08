@@ -1,0 +1,9 @@
+.checkbox-form-controller {
+  width: 400px;
+}
+
+@media screen and (max-width: 800px) {
+  .checkbox-form-controller {
+    width: 100%;
+  }
+}

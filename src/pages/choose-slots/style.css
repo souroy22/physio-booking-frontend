@@ -27,3 +27,31 @@
   display: flex;
   justify-content: center;
 }
+
+.table-heading-cell {
+  font-weight: 500 !important;
+  font-size: 18px !important;
+}
+
+.day-name-cell {
+  font-weight: 500 !important;
+}
+
+.loading-table-cell {
+  width: 40%;
+}
+
+@media screen and (max-width: 800px) {
+  .booking-table {
+    width: 100%;
+  }
+  .booking-description {
+    width: 90%;
+  }
+  .day-cell {
+    width: 20%;
+  }
+  .loading-table-cell {
+    width: 100%;
+  }
+}

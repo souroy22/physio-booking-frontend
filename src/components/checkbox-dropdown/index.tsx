@@ -6,6 +6,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { Box, Chip } from "@mui/material";
+import { convertTo12HourFormat } from "../../utils/formatTime12HoursFormat";
+import "./style.css";
 
 type TimingType = string[];
 
@@ -28,13 +30,12 @@ const CheckboxDropdown = ({
     const {
       target: { value },
     } = event;
-    console.log("Event", event.target);
     handleClick(typeof value === "string" ? value.split(",") : value);
   };
 
   return (
     <Box>
-      <FormControl sx={{ m: 1, width: 300 }}>
+      <FormControl sx={{ m: 1 }} className="checkbox-form-controller">
         <InputLabel id="demo-multiple-checkbox-label">{placeholder}</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
@@ -67,7 +68,12 @@ const CheckboxDropdown = ({
                   ) > -1
                 }
               />
-              <ListItemText primary={`${time.startTime} - ${time.endTime}`} />
+              <ListItemText
+                primary={`${convertTo12HourFormat(
+                  time.startTime
+                )} - ${convertTo12HourFormat(time.endTime)}`}
+                sx={{ "& span": { fontWeight: 500 } }}
+              />
             </MenuItem>
           ))}
         </Select>

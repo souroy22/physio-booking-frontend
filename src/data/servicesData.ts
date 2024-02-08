@@ -1,6 +1,6 @@
 import MUSCLE_INJURY from "../assets/images/prosthesis-traumatology-icon-on-white-background-vector.jpg";
 import ANKEL_SPRAIN from "../assets/images/7_md.png";
-import DANCING_INJURY from "../assets/images/female-legs-protective-knee-pads-safety-equipment-dancing-fitness-sport-protect-joint-lifestyle-vector-291230105.webp";
+import DANCING_INJURY from "../assets/images/female-legs.webp";
 import CEREBRAL_PALSY from "../assets/images/download.png";
 
 export const services = [

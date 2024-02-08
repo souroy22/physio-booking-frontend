@@ -17,7 +17,7 @@ import { RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { handleLogout } from "../../apis/authApis";
 import { logoutUser } from "../../store/auth/authReducer";
-import LOGO_PATH from "../../assets/images/_26ff86d0-8e48-4572-92c9-e7fb02b47805.jpg";
+import LOGO_PATH from "../../assets/images/_26ff86d0-8e48-4572-92c9-e7fb02b47805.webp";
 import "./style.css";
 
 const pages = [
