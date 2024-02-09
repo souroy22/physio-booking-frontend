@@ -19,7 +19,7 @@ import { getUserByEmailId } from "../../apis/userApis";
 import SkeletonComp from "../../components/skeleton";
 import notification from "../../config/notification";
 import { verifyEmailID } from "../../utils/verifyEmail";
-import { getDoctors } from "../../apis/doctorApis";
+import { convertTo12HourFormat } from "../../utils/formatTime12HoursFormat";
 
 type STATE_TYPE = { name: string; value: string };
 
@@ -31,6 +31,8 @@ const BookingPage = () => {
 
   const [selectedSlot, setSelectedSlot] = useState<STATE_TYPE | null>(null);
   const [availableSlots, setAvailableSlots] = useState<STATE_TYPE[]>([]);
+
+  const [data, setData] = useState<any>({});
 
   const [fakeUpdate, setFakeUpdate] = useState<boolean>(false);
 
@@ -60,34 +62,57 @@ const BookingPage = () => {
   const formatTime = (slots: any) => {
     const formattedTime: { name: string; value: string }[] = slots.map(
       (s: any) => {
-        return { name: `${s.startTime} to ${s.endTime}`, value: s.id };
+        return {
+          name: `${convertTo12HourFormat(
+            s.startTime
+          )} - ${convertTo12HourFormat(s.endTime)}`,
+          value: s.id,
+        };
       }
     );
     return formattedTime;
   };
 
+  const formatDoctors = (doctors: any) => {
+    const d: any = {};
+    for (const key of Object.keys(doctors)) {
+      const arr: any = [];
+      for (const doctor of doctors[key]) {
+        arr.push({ name: doctor.name, value: doctor._id });
+      }
+      d[key] = arr;
+    }
+    setData(d);
+  };
+
   const onChangeSlot = (_: string, value: STATE_TYPE) => {
     setSelectedSlot(value);
+    setSelectedDoctor(null);
     setAvailabletiming(formatTime(slots[value.name].slots));
   };
 
   const getSlotData = async (id: string = "", timing: string = "") => {
     const result = await getAvailableSlots(id, timing);
+    formatDoctors(result.doctors);
     setAvailableSlots(formatSlots(result.slots));
     dispatch(setSlots(result.slots));
   };
 
   const onLoad = async () => {
     setLoading(true);
-    const data: any = await getDoctors();
-    const formattedData = data.map((d: any) => {
-      return { name: d.name, value: d._id };
-    });
-    setDoctors(formattedData);
+    // const data: any = await getDoctors();
+    // const formattedData = data.map((d: any) => {
+    //   return { name: d.name, value: d._id };
+    // });
+    await getSlotData();
+    // setDoctors(formattedData);
     setLoading(false);
   };
 
   const selectSlot = (_: string, value: STATE_TYPE) => {
+    // console.log("Value", value.value);
+    console.log("data[value.value]", data);
+    setDoctors(data[value.value]);
     setSelectedTime(value);
   };
 
@@ -137,6 +162,7 @@ const BookingPage = () => {
   };
 
   const handleFilter = async (_: string, value: STATE_TYPE) => {
+    setDoctors([]);
     setDataLoading(true);
     setSelectedFilter(value);
     setSelectedDoctor(() => null);
@@ -144,20 +170,22 @@ const BookingPage = () => {
     setSelectedTime(null);
     setAvailableSlots([]);
     setAvailabletiming([]);
-    // await getSlotData(selectedDoctor?.value, value.value);
+    await getSlotData(selectedDoctor?.value, value.value);
     setDataLoading(false);
     setFakeUpdate(!fakeUpdate);
   };
 
   const onSelectedDoctor = async (_: string, value: STATE_TYPE) => {
-    setDataLoading(true);
+    console.log("Selected doctor", value);
+
+    // setDataLoading(true);
     setSelectedDoctor(value);
-    setSelectedSlot(null);
-    setSelectedTime(null);
-    setAvailableSlots([]);
-    setAvailabletiming([]);
-    await getSlotData(value.value, selectedFilter?.value);
-    setDataLoading(false);
+    // setSelectedSlot(null);
+    // setSelectedTime(null);
+    // setAvailableSlots([]);
+    // setAvailabletiming([]);
+    // await getSlotData(value.value, selectedFilter?.value);
+    // setDataLoading(false);
   };
 
   useEffect(() => {
@@ -188,15 +216,8 @@ const BookingPage = () => {
           selectedValue={selectedFilter}
         />
         <Dropdown
-          name="doctor"
-          placeholder="Select Doctor"
-          options={doctors}
-          handleChange={onSelectedDoctor}
-          selectedValue={selectedDoctor}
-        />
-        <Dropdown
           name="slot-day"
-          placeholder="Select days"
+          placeholder="Select days *"
           options={availableSlots}
           handleChange={onChangeSlot}
           selectedValue={selectedSlot}
@@ -204,65 +225,69 @@ const BookingPage = () => {
         />
         <Dropdown
           name="slot-time"
-          placeholder="Select time"
+          placeholder="Select time *"
           options={availabletiming}
           handleChange={selectSlot}
           selectedValue={selectedTime}
           loading={dataLoading}
         />
+        <Box className="form-verify-user">
+          <TextField
+            required
+            autoComplete="off"
+            value={email}
+            placeholder="Type User Emailid *"
+            onChange={(event) => {
+              setVerifyEmail(false);
+              setEmail(event.target.value);
+            }}
+          />
 
-        {user.isAdmin === "Saler" && (
-          <Box className="form-verify-user">
-            <TextField
-              required
-              autoComplete="off"
-              value={email}
-              placeholder="Type User Emailid"
-              onChange={(event) => {
-                setVerifyEmail(false);
-                setEmail(event.target.value);
-              }}
-            />
-
-            <Box sx={{ display: "flex" }}>
-              {!verifyEmail || verifyEmail === "loading" ? (
-                <Tooltip title="Click to verify">
-                  <Button
-                    onClick={checkUser}
-                    sx={{
-                      cursor: "pointer",
+          <Box sx={{ display: "flex" }}>
+            {!verifyEmail || verifyEmail === "loading" ? (
+              <Tooltip title="Click to verify">
+                <Button
+                  onClick={checkUser}
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: "green",
+                    color: "#FFF",
+                    transition: "all 0.4s ease-in-out",
+                    "&:hover": {
                       backgroundColor: "green",
-                      color: "#FFF",
-                      transition: "all 0.4s ease-in-out",
-                      "&:hover": {
-                        backgroundColor: "green",
-                        transform: "scale(1.05)",
-                      },
-                    }}
-                  >
-                    {verifyEmail === "loading" ? (
-                      <CircularProgress
-                        sx={{
-                          color: "#FFF",
-                          height: "24px !important",
-                          width: "24px !important",
-                        }}
-                      />
-                    ) : (
-                      "Verify"
-                    )}
-                  </Button>
-                </Tooltip>
-              ) : (
-                <Tooltip title="Email Verified">
-                  <VerifiedIcon sx={{ color: "navy" }} />
-                </Tooltip>
-              )}
-            </Box>
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
+                  {verifyEmail === "loading" ? (
+                    <CircularProgress
+                      sx={{
+                        color: "#FFF",
+                        height: "24px !important",
+                        width: "24px !important",
+                      }}
+                    />
+                  ) : (
+                    "Verify"
+                  )}
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Email Verified">
+                <VerifiedIcon sx={{ color: "navy" }} />
+              </Tooltip>
+            )}
           </Box>
-        )}
+        </Box>
+        <Dropdown
+          name="doctor"
+          placeholder="Select Doctor *"
+          options={doctors}
+          handleChange={onSelectedDoctor}
+          selectedValue={selectedDoctor}
+        />
         <TextField
-          placeholder="Add remarks"
+          placeholder="Add remarks *"
           value={remarks}
           onChange={(event) => setRemarks(event.target.value)}
         />

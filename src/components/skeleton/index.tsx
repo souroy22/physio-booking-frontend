@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -7,6 +8,7 @@ type Proptype = {
   width?: string | number;
   isCircle?: boolean;
   borderRadius?: string | number;
+  style?: CSSProperties;
 };
 
 const SkeletonComp = ({
@@ -15,6 +17,7 @@ const SkeletonComp = ({
   height = "20px",
   width = "100%",
   borderRadius = "0.25rem",
+  style = {},
 }: Proptype) => {
   return (
     <Skeleton
@@ -23,6 +26,7 @@ const SkeletonComp = ({
       height={height}
       width={width}
       borderRadius={borderRadius}
+      style={style}
     />
   );
 };

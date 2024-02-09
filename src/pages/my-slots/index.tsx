@@ -7,6 +7,9 @@ import { addMySlots } from "../../store/slot/slotReducer";
 import { RootState } from "../../store/store";
 import { getAllSlotsTiming } from "../../utils/getAllSlotsTable";
 import { days } from "../../data/days";
+import { convertTo12HourFormat } from "../../utils/formatTime12HoursFormat";
+import { formatTime } from "../../utils/formatTime";
+import SkeletonComp from "../../components/skeleton";
 
 type TIME_TYPE = {
   startTime: string;
@@ -15,15 +18,17 @@ type TIME_TYPE = {
 };
 
 const MySlots = () => {
-  const [selectedDay, setSelectedDay] = useState<string>("Monday");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const mySlots = useSelector((state: RootState) => state.slotReducer.mySlots);
 
   const dispatch = useDispatch();
 
   const onLoad = async () => {
+    setLoading(true);
     const data = await getMySlots();
     dispatch(addMySlots(data));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -37,6 +42,27 @@ const MySlots = () => {
     ).length;
   };
 
+  const isInBetweenSelectedSlots = (time: TIME_TYPE, slots: TIME_TYPE[]) => {
+    return slots.filter(
+      (slot) =>
+        formatTime(time.startTime) < formatTime(slot.endTime) &&
+        formatTime(time.endTime) > formatTime(slot.startTime)
+    ).length;
+  };
+
+  if (loading) {
+    return (
+      <Box className="loading-container">
+        <SkeletonComp
+          count={1}
+          height="90vh"
+          width="95vw"
+          style={{ margin: "0 auto", marginTop: "20px" }}
+        />
+      </Box>
+    );
+  }
+
   return (
     <Box className="my-slots-container">
       <Box className="table">
@@ -48,14 +74,7 @@ const MySlots = () => {
             Time / Period
           </Box>
           {days.map((day) => (
-            <Box
-              onClick={() => setSelectedDay(day)}
-              className={`day-heading-box ${
-                selectedDay === day ? "selected" : ""
-              } center-align-text`}
-            >
-              {day}
-            </Box>
+            <Box className={`day-heading-box center-align-text`}>{day}</Box>
           ))}
         </Box>
         <Box className="days-body">
@@ -63,7 +82,8 @@ const MySlots = () => {
             {getAllSlotsTiming().map((slotTime) => (
               <Box className="days-data-section">
                 <Box className="days-data-section-leftbar center-align-text">
-                  {slotTime.startTime} - {slotTime.endTime}
+                  {convertTo12HourFormat(slotTime.startTime)} -{" "}
+                  {convertTo12HourFormat(slotTime.endTime)}
                 </Box>
                 <Box className="scheduled-status-section">
                   {days.map((day) => {
@@ -77,6 +97,16 @@ const MySlots = () => {
                         </Box>
                       );
                     } else {
+                      if (
+                        mySlots[day] &&
+                        isInBetweenSelectedSlots(slotTime, mySlots[day].slots)
+                      ) {
+                        return (
+                          <Box className="scheduled-status-data not-allowed center-align-text">
+                            Not Allowed
+                          </Box>
+                        );
+                      }
                       return (
                         <Box className="scheduled-status-data center-align-text">
                           Not Scheduled
@@ -88,32 +118,6 @@ const MySlots = () => {
               </Box>
             ))}
           </Box>
-          {/* <Box>
-            {getAllSlotsTiming().map((slotTime) => {
-              return (
-                <Box className="scheduled-status">
-                  {days.map((day) => {
-                    if (
-                      mySlots[day] &&
-                      checkStatus(slotTime, mySlots[day].slots)
-                    ) {
-                      return (
-                        <Box className="scheduled-status-data center-align-text">
-                          Scheduled
-                        </Box>
-                      );
-                    } else {
-                      return (
-                        <Box className="scheduled-status-data center-align-text">
-                          Not Scheduled
-                        </Box>
-                      );
-                    }
-                  })}
-                </Box>
-              );
-            })}
-          </Box> */}
         </Box>
       </Box>
     </Box>

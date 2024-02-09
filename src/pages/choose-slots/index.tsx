@@ -25,6 +25,7 @@ const ChooseSlots = () => {
   const [selectedTiming, setSelectedTiming] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
+  const [selectedSlots, setSelectedSlots] = useState<any>({});
 
   const user = useSelector((state: RootState) => state.authReducer.user);
 
@@ -36,7 +37,8 @@ const ChooseSlots = () => {
   const onLoad = async () => {
     setInitialLoading(true);
     const result: any = await getUnscheduleSlots();
-    dispatch(setSlots(result));
+    dispatch(setSlots(result.unScheduleSlots));
+    setSelectedSlots(result.selectedSlots);
     setInitialLoading(false);
   };
 
@@ -102,6 +104,7 @@ const ChooseSlots = () => {
                         day={slots[slot].id}
                         placeholder="Select Timings"
                         timings={slots[slot].slots}
+                        selectedSlots={selectedSlots[slot]?.slots}
                         handleClick={handleClick}
                       />
                     </TableCell>

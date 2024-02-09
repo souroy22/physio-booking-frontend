@@ -58,8 +58,14 @@ const pages = [
     accessRoles: ["Doctor"],
   },
   {
-    name: "Appointments",
+    name: "My Appointments",
     url: "/appointments",
+    private: true,
+    accessRoles: ["User"],
+  },
+  {
+    name: "Available Slots",
+    url: "/available-slots",
     private: true,
     accessRoles: ["User"],
   },
@@ -216,7 +222,7 @@ const Navbar = () => {
                     <Button
                       key={page.name}
                       onClick={() => handleCloseNavMenu(page)}
-                      sx={{ my: 2, color: "white", display: "block" }}
+                      sx={{ my: 2, color: "white", display: "block", mr: 2 }}
                     >
                       {page.name}
                     </Button>

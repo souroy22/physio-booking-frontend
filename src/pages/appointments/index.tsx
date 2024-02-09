@@ -16,6 +16,7 @@ import { RootState } from "../../store/store";
 import { getAllAppointments } from "../../store/appointment/appointmentReducer";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 import "./style.css";
+import { convertTo12HourFormat } from "../../utils/formatTime12HoursFormat";
 
 const columns = [
   { label: "Start Time", value: "startTime" },
@@ -120,7 +121,9 @@ const Appointments = () => {
                   <>
                     {columns.map((col: any) => (
                       <TableCell key={col.label}>
-                        {appointment[col.value]}
+                        {col.value === "startTime" || col.value === "endTime"
+                          ? convertTo12HourFormat(appointment[col.value])
+                          : appointment[col.value]}
                       </TableCell>
                     ))}
                   </>

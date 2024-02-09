@@ -83,7 +83,11 @@ const Testimonials = () => {
                 ))}
               </Box>
               <Box className="reviewer-photo-container">
-                <img src={data.photo} className="reviewer-photo" />
+                <img
+                  src={data.photo}
+                  className="reviewer-photo"
+                  loading="lazy"
+                />
               </Box>
               <Box className="reviewer-name">{data.name}</Box>
             </Box>

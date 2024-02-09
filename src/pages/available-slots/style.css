@@ -6,13 +6,6 @@
   overflow-x: auto;
 }
 
-.loading-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
 .table {
   margin: 0 auto;
   box-shadow: 0 0 10px gray;
@@ -83,13 +76,6 @@
 .isScheduled {
   border-radius: 5px;
   background-color: green;
-  color: white;
-  font-weight: 600;
-}
-
-.not-allowed {
-  border-radius: 5px;
-  background-color: red;
   color: white;
   font-weight: 600;
 }

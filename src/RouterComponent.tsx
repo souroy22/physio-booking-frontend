@@ -19,21 +19,7 @@ const LazyUnAuthorisedPage = React.lazy(
 );
 const LazySellerRoute = React.lazy(() => import("./components/sellerRoute"));
 const LazyDoctorRoute = React.lazy(() => import("./components/doctorRoute"));
-// import NonAuthRoute from "./components/non-auth-route";
-// import PrivateRoute from "./components/privateRoute";
-// import HomePage from "./pages/home";
-// import LoginPage from "./pages/login";
-// import SignupPage from "./pages/signup";
-// import BookingPage from "./pages/booking";
-// import ChooseSlots from "./pages/choose-slots";
-// import Appointments from "./pages/appointments";
-// import NoPageFound from "./pages/NoPageFound";
-// import Profile from "./pages/profile";
-// import MySlots from "./pages/my-slots";
-// import UnAuthorisedPage from "./pages/unAuthorised_page";
-// import SellerRoute from "./components/sellerRoute";
-// import DoctorRoute from "./components/doctorRoute";
-// import Loader from "./components/loader";
+const LazyAvailableSlots = React.lazy(() => import("./pages/available-slots"));
 import { Route, Routes } from "react-router-dom";
 
 const RouterComponent = () => {
@@ -48,7 +34,7 @@ const RouterComponent = () => {
             justifyContent: "center",
             flexWrap: "wrap",
             alignItems: "center",
-            filter: "blur(8px)",
+            // filter: "blur(8px)",
           }}
         >
           <CircularProgress sx={{ zIndex: 10000 }} />
@@ -75,6 +61,7 @@ const RouterComponent = () => {
           </Route>
           <Route path="/profile" element={<LazyProfile />} />
           <Route path="/appointments" element={<LazyAppointments />} />
+          <Route path="/available-slots" element={<LazyAvailableSlots />} />
         </Route>
         <Route path="/unauthorised" element={<LazyUnAuthorisedPage />} />
         <Route path="*" element={<LazyNoPageFound />} />
